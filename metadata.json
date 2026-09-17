@@ -1,0 +1,6 @@
+{
+  "name": "squareimage by bijit",
+  "description": "Convert single or multiple images into a 1:1 square ratio placed on a 1:1 whiteboard without cropping.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

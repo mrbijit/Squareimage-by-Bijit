@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "squareimage by bijit",
+  "short_name": "SquareImage",
+  "description": "Convert single or multiple images into a 1:1 ratio on a whiteboard without cropping",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
