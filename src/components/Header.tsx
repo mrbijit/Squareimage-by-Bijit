@@ -1,12 +1,15 @@
 import React from 'react';
-import { Download, Monitor, Package, Sparkles, HelpCircle, RefreshCw } from 'lucide-react';
+import { Download, Monitor, Package, Sparkles, HelpCircle, RefreshCw, Square, ArrowRightLeft } from 'lucide-react';
 import { usePWAInstall } from '../hooks/usePWAInstall';
+import { AppMode } from '../types';
 
 interface HeaderProps {
   onOpenWindowsModal: () => void;
   onOpenHelpModal: () => void;
   onLoadSamples: () => void;
   totalImages: number;
+  activeMode: AppMode;
+  onModeChange: (mode: AppMode) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,6 +17,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenHelpModal,
   onLoadSamples,
   totalImages,
+  activeMode,
+  onModeChange,
 }) => {
   const { isInstallable, isInstalled, install } = usePWAInstall();
 
@@ -29,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({
             squareimage by bijit
           </span>
           <span className="text-[10px] text-slate-500 font-mono hidden sm:inline">
-            v1.0.0 (Windows Desktop Edition)
+            v1.1.0 (Windows Desktop Edition)
           </span>
         </div>
 
@@ -78,18 +83,54 @@ export const Header: React.FC<HeaderProps> = ({
                 squareimage <span className="text-sky-400 font-normal">by bijit</span>
               </h1>
               <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded-full">
-                No Crop Whiteboard Engine
+                Desktop Image Suite
               </span>
             </div>
             <p className="text-xs text-slate-400">
-              Convert single or multiple images into a 1:1 ratio placed on a 1:1 whiteboard
+              1:1 Whiteboard Square Conversion &amp; HEIC/All-Format to JPEG Converter
             </p>
           </div>
         </div>
 
+        {/* Mode Switcher Tabs */}
+        <div className="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+          <button
+            type="button"
+            onClick={() => onModeChange('whiteboard')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              activeMode === 'whiteboard'
+                ? 'bg-sky-500 text-slate-950 shadow-md shadow-sky-500/20'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Square className="w-3.5 h-3.5" />
+            <span>1:1 Whiteboard Square</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onModeChange('heic-to-jpeg')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition relative ${
+              activeMode === 'heic-to-jpeg'
+                ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <ArrowRightLeft className="w-3.5 h-3.5" />
+            <span>HEIC / All &rarr; JPEG</span>
+            <span className={`text-[9px] px-1 py-0.2 rounded font-bold uppercase tracking-wider ${
+              activeMode === 'heic-to-jpeg'
+                ? 'bg-slate-950/30 text-slate-950'
+                : 'bg-amber-500/20 text-amber-300'
+            }`}>
+              New
+            </span>
+          </button>
+        </div>
+
         {/* Action Buttons */}
         <div className="flex items-center gap-2 flex-wrap">
-          {totalImages === 0 && (
+          {activeMode === 'whiteboard' && totalImages === 0 && (
             <button
               onClick={onLoadSamples}
               id="btn-load-samples"
@@ -119,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 border border-indigo-500/30 transition"
           >
             <Package className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Windows .EXE & Package</span>
+            <span>Windows .EXE &amp; Package</span>
           </button>
 
           <button

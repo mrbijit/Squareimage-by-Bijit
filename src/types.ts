@@ -36,3 +36,28 @@ export interface ConversionSettings {
   quality: number; // 0.1 to 1.0 (for jpeg/webp)
   filenameSuffix: string;
 }
+
+export type AppMode = 'whiteboard' | 'heic-to-jpeg';
+
+export interface HeicJpegItem {
+  id: string;
+  file: File;
+  name: string;
+  originalFormat: string;
+  originalSize: number;
+  previewUrl: string;
+  width: number;
+  height: number;
+  status: 'pending' | 'converting' | 'done' | 'error';
+  progress: number;
+  convertedBlob: Blob | null;
+  convertedUrl: string | null;
+  convertedSize: number | null;
+  error?: string;
+}
+
+export interface HeicJpegSettings {
+  quality: number; // 0.7 to 1.0
+  namingOption: 'replace-ext' | 'suffix';
+  filenameSuffix: string;
+}

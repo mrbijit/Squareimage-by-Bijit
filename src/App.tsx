@@ -7,7 +7,8 @@ import { PreviewModal } from './components/PreviewModal';
 import { WindowsExeModal } from './components/WindowsExeModal';
 import { HelpModal } from './components/HelpModal';
 import { StatusBar } from './components/StatusBar';
-import { ProcessedImage, ConversionSettings } from './types';
+import { HeicJpegConverter } from './components/HeicJpegConverter';
+import { ProcessedImage, ConversionSettings, AppMode } from './types';
 import { processImageTo1x1 } from './utils/imageProcessor';
 import { createZipOfImages, downloadBlob, getFileExtension, cleanBaseName } from './utils/zipGenerator';
 import { createSampleImagesList } from './utils/sampleImages';
@@ -27,6 +28,7 @@ const DEFAULT_SETTINGS: ConversionSettings = {
 };
 
 export default function App() {
+  const [activeMode, setActiveMode] = useState<AppMode>('whiteboard');
   const [images, setImages] = useState<ProcessedImage[]>([]);
   const [settings, setSettings] = useState<ConversionSettings>(DEFAULT_SETTINGS);
   const [isProcessingBatch, setIsProcessingBatch] = useState(false);
@@ -288,67 +290,76 @@ export default function App() {
         onOpenHelpModal={() => setIsHelpModalOpen(true)}
         onLoadSamples={handleLoadSamples}
         totalImages={images.length}
+        activeMode={activeMode}
+        onModeChange={setActiveMode}
       />
 
       {/* Main Workspace Layout */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-6">
-        {/* Upload Zone */}
-        <UploadZone
-          onFilesSelected={handleFilesSelected}
-          onLoadSamples={handleLoadSamples}
-          isLoadingSamples={isLoadingSamples}
-        />
-
-        {/* Content Area: Controls + Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          {/* Settings Sidebar */}
-          <div className="lg:col-span-4 lg:sticky lg:top-20">
-            <ControlsPanel
-              settings={settings}
-              onChange={handleSettingsChange}
-              onReset={handleResetSettings}
-              disabled={isProcessingBatch}
+        {activeMode === 'whiteboard' ? (
+          <>
+            {/* Upload Zone */}
+            <UploadZone
+              onFilesSelected={handleFilesSelected}
+              onLoadSamples={handleLoadSamples}
+              isLoadingSamples={isLoadingSamples}
             />
-          </div>
 
-          {/* Batch Images Preview & Action Area */}
-          <div className="lg:col-span-8 space-y-4">
-            {images.length > 0 ? (
-              <ImageGrid
-                images={images}
-                onRemove={handleRemoveImage}
-                onClearAll={handleClearAll}
-                onDownloadSingle={handleDownloadSingle}
-                onDownloadZip={handleDownloadZip}
-                onInspect={(item) => setSelectedPreviewItem(item)}
-                onAddMoreClick={() => fileInputRef.current?.click()}
-                isZipping={isZipping}
-                zipProgress={zipProgress}
-                exportFormat={settings.exportFormat}
-              />
-            ) : (
-              <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-10 text-center flex flex-col items-center justify-center space-y-3">
-                <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-500">
-                  <div className="w-6 h-6 border-2 border-dashed border-slate-500 rounded-sm" />
-                </div>
-                <h3 className="text-sm font-semibold text-slate-300">
-                  No images in conversion queue
-                </h3>
-                <p className="text-xs text-slate-400 max-w-md">
-                  Drop single or multiple images above to instantly convert them into 1:1 ratio placed on a 1:1 whiteboard without cropping.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleLoadSamples}
-                  disabled={isLoadingSamples}
-                  className="mt-2 text-xs font-semibold text-sky-400 hover:text-sky-300 bg-sky-950/50 border border-sky-500/30 px-3 py-1.5 rounded-lg transition"
-                >
-                  {isLoadingSamples ? 'Generating samples...' : 'Click here to load 3 sample images'}
-                </button>
+            {/* Content Area: Controls + Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              {/* Settings Sidebar */}
+              <div className="lg:col-span-4 lg:sticky lg:top-20">
+                <ControlsPanel
+                  settings={settings}
+                  onChange={handleSettingsChange}
+                  onReset={handleResetSettings}
+                  disabled={isProcessingBatch}
+                />
               </div>
-            )}
-          </div>
-        </div>
+
+              {/* Batch Images Preview & Action Area */}
+              <div className="lg:col-span-8 space-y-4">
+                {images.length > 0 ? (
+                  <ImageGrid
+                    images={images}
+                    onRemove={handleRemoveImage}
+                    onClearAll={handleClearAll}
+                    onDownloadSingle={handleDownloadSingle}
+                    onDownloadZip={handleDownloadZip}
+                    onInspect={(item) => setSelectedPreviewItem(item)}
+                    onAddMoreClick={() => fileInputRef.current?.click()}
+                    isZipping={isZipping}
+                    zipProgress={zipProgress}
+                    exportFormat={settings.exportFormat}
+                  />
+                ) : (
+                  <div className="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-10 text-center flex flex-col items-center justify-center space-y-3">
+                    <div className="w-12 h-12 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center justify-center text-slate-500">
+                      <div className="w-6 h-6 border-2 border-dashed border-slate-500 rounded-sm" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-slate-300">
+                      No images in conversion queue
+                    </h3>
+                    <p className="text-xs text-slate-400 max-w-md">
+                      Drop single or multiple images above to instantly convert them into 1:1 ratio placed on a 1:1 whiteboard without cropping.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleLoadSamples}
+                      disabled={isLoadingSamples}
+                      className="mt-2 text-xs font-semibold text-sky-400 hover:text-sky-300 bg-sky-950/50 border border-sky-500/30 px-3 py-1.5 rounded-lg transition"
+                    >
+                      {isLoadingSamples ? 'Generating samples...' : 'Click here to load 3 sample images'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          /* New Feature: HEIC & All Formats to JPEG Converter */
+          <HeicJpegConverter />
+        )}
       </main>
 
       {/* Windows Desktop Status Bar */}
@@ -357,6 +368,7 @@ export default function App() {
         readyCount={readyCount}
         isProcessing={isProcessingBatch}
         settings={settings}
+        activeMode={activeMode}
       />
 
       {/* Inspect / High-Res Preview Modal */}

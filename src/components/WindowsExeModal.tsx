@@ -188,7 +188,7 @@ export const WindowsExeModal: React.FC<WindowsExeModalProps> = ({ isOpen, onClos
                     3. Zero-Install Offline Runner
                   </h5>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    Double-click <code className="text-emerald-300">run_portable_windows.bat</code>. Works completely offline with zero installation or setup required.
+                    Double-click <code className="text-emerald-300">run_portable_windows.bat</code>. Works 100% offline with zero setup required, including built-in <span className="text-emerald-400 font-semibold">Download All as ZIP</span>!
                   </p>
                 </div>
                 <div className="pt-2 border-t border-slate-800/80">

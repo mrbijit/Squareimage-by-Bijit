@@ -63,6 +63,12 @@ export const HelpModal: React.FC<HelpModalProps> = ({ isOpen, onClose }) => {
                 </span>
               </li>
               <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <span>
+                  <strong className="text-amber-300">HEIC &amp; All Images &rarr; JPEG Mode:</strong> Instant converter for Apple iPhone HEIC, PNG, WEBP, BMP, AVIF, TIFF directly into high-quality JPEG format. Choose to save one by one or save all at once into a ZIP archive.
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                 <span>
                   <strong>1-Click ZIP Download:</strong> Save individual images or package the entire batch into a clean ZIP file.

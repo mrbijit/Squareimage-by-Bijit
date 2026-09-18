@@ -51,9 +51,14 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
             {images.length}
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-slate-100">
-              Batch Queue ({readyCount} of {images.length} ready)
-            </h3>
+            <div className="flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-slate-100">
+                Batch Queue ({readyCount} of {images.length} ready)
+              </h3>
+              <span className="text-[10px] bg-emerald-500/15 text-emerald-300 border border-emerald-500/20 px-1.5 py-0.5 rounded font-medium">
+                Offline ZIP Ready
+              </span>
+            </div>
             <p className="text-xs text-slate-400">
               Placed onto 1:1 Whiteboard • No cropping applied
             </p>
